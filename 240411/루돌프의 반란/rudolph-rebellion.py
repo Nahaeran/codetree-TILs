@@ -66,16 +66,14 @@ def crash(R, direct, Si, F, t):
 def move_santa(Si, k, nr, nc, turn):
     global board, santa_positions
 
-    if board[nr][nc] == 0 or board[nr][nc] == "R":
-        if 0 < nr <= N and 0 < nc <= N:
-            Sr, Sc = santa_positions[Si][0:2]
-            board[Sr][Sc] = 0
-            santa_positions[i][0] = nr
-            santa_positions[i][1] = nc
-            if board[nr][nc] == "R":
-                crash((Rr, Rc), (-1 * Sdi[k], -1 * Sdj[k]), Si, D, turn)
-            else:
-                board[nr][nc] = Si
+    Sr, Sc = santa_positions[Si][0:2]
+    board[Sr][Sc] = 0
+    santa_positions[i][0] = nr
+    santa_positions[i][1] = nc
+    if board[nr][nc] == "R":
+        crash((Rr, Rc), (-1 * Sdi[k], -1 * Sdj[k]), Si, D, turn)
+    else:
+        board[nr][nc] = Si
 
 
 turn = 1
@@ -84,13 +82,15 @@ Sdj = [0, 1, 0, -1]
 
 while turn <= M:
     # 턴마다 루돌프와 가장 가까운 산타 찾기 [r좌표, c좌표, 루돌프 번호]
-    near = [*santa_positions[1][0:2], 1]
-    dist_near = cal_distance((Rr, Rc), near)
-    for i in range(2, P + 1):
+    near = -1
+    dist_near = N ** N
+    for i in range(1, P + 1):
         dist_santa = cal_distance((Rr, Rc), santa_positions[i])
         if not santa_drop[i] and dist_near >= dist_santa:
-            if dist_near > dist_santa or (near[0] < santa_positions[i][0] or (near[0] == santa_positions[i] and near[1] < santa_positions[1])):
+            if dist_near > dist_santa or (near[0] < santa_positions[i][0] or (near[0] == santa_positions[i][0] and near[1] < santa_positions[i][1])):
                 near = [*santa_positions[i][0:2], i]
+                dist_near = dist_santa
+
     # 하 우
     if Rr < near[0] and Rc < near[1]:
         board[Rr][Rc] = 0
