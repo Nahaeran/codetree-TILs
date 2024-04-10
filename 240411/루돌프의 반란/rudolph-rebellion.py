@@ -83,7 +83,7 @@ Sdj = [0, 1, 0, -1]
 while turn <= M:
     # 턴마다 루돌프와 가장 가까운 산타 찾기 [r좌표, c좌표, 루돌프 번호]
     near = -1
-    dist_near = N ** N
+    dist_near = N ** 2
     for i in range(1, P + 1):
         dist_santa = cal_distance((Rr, Rc), santa_positions[i])
         if not santa_drop[i] and dist_near >= dist_santa:
@@ -193,6 +193,8 @@ while turn <= M:
         if santa_positions[i][2] > 0 and santa_positions[i][2] + 1 == turn:
             santa_positions[i][2] = 0
     
+    if sum(santa_drop[1:]) == P: break
+
     turn += 1
 
 print(*results[1:])
